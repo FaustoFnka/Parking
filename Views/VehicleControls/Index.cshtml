@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Parking.Models.VehicleControl>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Find by Placa: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Placa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HoraEntrada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HoraSaida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QtdHorasCobradas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorHora)
+            </th>
+            <th>
+                Valor a Pagar
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Placa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoraEntrada)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoraSaida)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duracao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QtdHorasCobradas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorHora)
+                </td>
+                <td>
+                    @item.ValorHora * itm.QtdHorasCobradas
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    @if (item.HoraEntrada.Equals(item.HoraSaida))
+                    {
+                        <a asp-action="Checkout" asp-route-id="@item.Id">Checkout</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
