@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Parking.Models
 {
@@ -12,6 +13,7 @@ namespace Parking.Models
         public int Id { get; set; }
         [DisplayName("Placa Veículo")]
         [Required(ErrorMessage = "Informe a Placa do Veículo")]
+        [StringLength(60, MinimumLength = 7)]
         public string Placa { get; set; }
         [DisplayName("Data/Hora Entrada")]
         [Required(ErrorMessage = "Informe a Data/Hora de Entrada")]
@@ -22,9 +24,12 @@ namespace Parking.Models
         [DisplayName("Duração")]
         public string Duracao { get; set; }
         [DisplayName("Quantidade Horas")]
-        public Double? QtdHorasCobradas { get; set; }
-        [DisplayName("Valor por Hora")]
+        public Decimal? QtdHorasCobradas { get; set; }
+        [DisplayName("Valor por Hora (media)")]
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public Double? ValorHora { get; set; }
+        [Range(1, 100)]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
+        public Decimal? ValorHora { get; set; }
     }
 }

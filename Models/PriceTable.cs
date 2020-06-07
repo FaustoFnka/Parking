@@ -19,10 +19,10 @@ namespace Parking.Models
         [DisplayName("Valor da Hora Inicial")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Required(ErrorMessage = "Valor da Primeira hora")]
-        public float ValorHoraInical { get; set; }
+        public Decimal ValorHoraInical { get; set; }
         [DisplayName("Valor da Hora Adicional")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Required(ErrorMessage = "Informe o valor para a hora adicional")]
-        public float ValorHoraAdicional { get; set; }
+        public Decimal ValorHoraAdicional { get; set; }
     }
 }

@@ -36,16 +36,14 @@
             <div class="form-group">
                 <label asp-for="QtdHorasCobradas" class="control-label"></label>
                 <input asp-for="QtdHorasCobradas" class="form-control" />
-                <span asp-validation-for="QtdHorasCobradas" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ValorHora" class="control-label"></label>
                 <input asp-for="ValorHora" class="form-control" />
-                <span asp-validation-for="ValorHora" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Valor a Pagar</label>
-                <input class="form-control" id="valorAPagar" type="number" value="@ViewBag.totalAPagar"/>
+                <input class="form-control" value="@ViewBag.totalAPagar"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

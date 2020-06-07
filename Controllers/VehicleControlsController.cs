@@ -23,11 +23,15 @@ namespace Parking.Controllers
         {
             var vehicleControls = from s in _context.VehicleControl
                                   select s;
-
+          
+            //irá filtrar os dados caso tenha sido digitado filtro.
             if (!String.IsNullOrEmpty(searchString))
             {
-                vehicleControls = vehicleControls.Where(s => s.Placa.Contains((searchString)));
+                vehicleControls = vehicleControls.Where(s => s.Placa.Contains(searchString.ToUpper()));
             }
+
+            //Irá apresentar primeiro os veículos que chegaram por último
+            vehicleControls = vehicleControls.OrderBy(s => s.HoraSaida);
 
             return View(vehicleControls.ToList());
         }
@@ -143,70 +147,90 @@ namespace Parking.Controllers
 
             if (vehicleControl.HoraEntrada.Equals(vehicleControl.HoraSaida))
             {
-                //Marca valor para saida agora.
+                //Marca valor para saida do veículo igual agora.
                 var nowDate = DateTime.Now;
+                nowDate = new DateTime(nowDate.Year, nowDate.Month, nowDate.Day, nowDate.Hour, nowDate.Minute, 0);
 
-                nowDate = new DateTime(nowDate.Year, nowDate.Month, nowDate.Day, nowDate.Hour, nowDate.Minute, nowDate.Second);
+                //Configura os valores de Hora Inicial e Adicional apartir da primeira tabela de preços vigente recuperada.
+                Decimal valorHoraInicial = 0;
+                Decimal valorHoraAdicional = 0;
 
+                //Recupera a primeira tabela de preço vigente baseado na data/hora de entrada do veículo.
+                try
+                {
+                    var pricevalues = from priceRow in _context.PriceTable
+                                      select priceRow;
+
+                    pricevalues = pricevalues.Where(priceRow => priceRow.InicioVigencia <= vehicleControl.HoraEntrada && priceRow.FimVigencia >= vehicleControl.HoraSaida);
+
+                    //Configura os valores de Hora Inicial e Adicional apartir da primeira tabela de preços vigente recuperada.
+                    valorHoraInicial = pricevalues.FirstOrDefault().ValorHoraInical;
+                    valorHoraAdicional = pricevalues.FirstOrDefault().ValorHoraAdicional;
+                }
+                catch {
+                    //Se não for possível a consulta da tabela de preços irá retornar como não encontrado.
+                    return NotFound("Tabela Vigente não encontrada!");
+                }
+
+                //Carrega os valores hora da tabela para ser apresentado ao usuário.
+                vehicleControl.ValorHora = ((valorHoraAdicional + valorHoraInicial)/2);
+
+                //Configura a hora de saída do veículo como Agora.
                 vehicleControl.HoraSaida = nowDate;
                 
-                
+                //Calcula a duração do estacionamento do veículo (separando Horas e Minutos).
                 TimeSpan Duracao = vehicleControl.HoraSaida - vehicleControl.HoraEntrada;
-                var totalHoras2 = Duracao.Hours;
+                var totalHoras = Duracao.Hours;
                 var totalmin = Duracao.Minutes;
 
-                Double horasAPagar;
+                //Verifica se ficou mais de 24horas
+                if (Duracao.Days>0)
+                {
+                    totalHoras =+ Duracao.Days * 24;
+                }
 
-                if (totalHoras2 < 1)
+                //Carrega o cálculo de Duração para ser apresentado ao usuário
+                vehicleControl.Duracao = Duracao.ToString();
+
+                Decimal horasAPagar;
+
+                if (totalHoras < 1)
                 {
                     //Menos de 1 hora
-                    //Calcular Qts minutos e Hora parcial
+                    //Calcular baseado em minutos para cobrar da hora inicial.
                     if (totalmin <= 30)
                     {
-                        horasAPagar =+ 0.5;
+                        horasAPagar = 1/2; //Meia hora caso tenha ficado até 30 min.
                     }
                     else
                     {
-                        horasAPagar = +1;
+                        horasAPagar = 1; // Uma hora cheia se passou de 30 min.
                     }
                 }
                 else
                 {
                     if (totalmin > 10)
                     {
-                        horasAPagar = totalHoras2 + 1;
+                        horasAPagar = totalHoras + 1; //Se passou de uma hora e passou de 10 minutos de tolerância soma mais uma hora.
                     }
                     else
                     {
-                        horasAPagar = totalHoras2;
+                        horasAPagar = totalHoras; // se não passou da tolerância de 10 minutos.
                     }
                 }
-
+                
+                //Carrega a Quantidade de Horas a cobrar para ser apresentada.
                 vehicleControl.QtdHorasCobradas = horasAPagar;
 
-                var pricevalues = from priceRow in _context.PriceTable
-                                      select priceRow;
-
-                pricevalues = pricevalues.Where(priceRow => priceRow.InicioVigencia <= vehicleControl.HoraEntrada && priceRow.FimVigencia >= vehicleControl.HoraSaida);
-
-                double valorHoraInicial = pricevalues.FirstOrDefault().ValorHoraInical;
-                double valorHoraAdicional = pricevalues.FirstOrDefault().ValorHoraAdicional;
-
-                ViewBag.totalAPagar = new Double();
-
+                //Carrega valor a pagar para ser apresentado ao usuario.
+                ViewBag.totalAPagar = new Decimal();
                 ViewBag.totalAPagar = (1 * valorHoraInicial + (horasAPagar - 1) * valorHoraAdicional);
 
-                vehicleControl.ValorHora = valorHoraAdicional;
-                vehicleControl.Duracao = Duracao.ToString();
+
                 }
 
             return View(vehicleControl);
         }
-
-        /*public DateTime TruncateToSecondStart(this DateTime dt)
-        {
-            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
-        }*/
 
         // POST: VehicleControls/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
