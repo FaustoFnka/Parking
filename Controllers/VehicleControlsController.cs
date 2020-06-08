@@ -157,8 +157,8 @@ namespace Parking.Controllers
                 nowDate = new DateTime(nowDate.Year, nowDate.Month, nowDate.Day, nowDate.Hour, nowDate.Minute, 0);
 
                 //Configura os valores de Hora Inicial e Adicional apartir da primeira tabela de preços vigente recuperada.
-                Decimal valorHoraInicial = 0;
-                Decimal valorHoraAdicional = 0;
+                Double valorHoraInicial = 0;
+                Double valorHoraAdicional = 0;
 
                 //Recupera a primeira tabela de preço vigente baseado na data/hora de entrada do veículo.
                 try
@@ -178,7 +178,14 @@ namespace Parking.Controllers
                 }
 
                 //Carrega os valores hora da tabela para ser apresentado ao usuário.
-                vehicleControl.ValorHora = ((valorHoraAdicional + valorHoraInicial)/2);
+                vehicleControl.ValorHora = valorHoraInicial;
+
+                //Configura variáveis a sere apresentadas em tela.
+                ViewBag.vlrHoraInicial = new Double();
+                ViewBag.vlrHoraInicial = valorHoraInicial;
+                ViewBag.vlrHoraAdicional = new Double();
+                ViewBag.vlrHoraAdicional = valorHoraAdicional;
+
 
                 //Configura a hora de saída do veículo como Agora.
                 vehicleControl.HoraSaida = nowDate;
@@ -197,7 +204,7 @@ namespace Parking.Controllers
                 //Carrega o cálculo de Duração para ser apresentado ao usuário
                 vehicleControl.Duracao = Duracao.ToString();
 
-                Decimal horasAPagar;
+                Double horasAPagar;
 
                 if (totalHoras < 1)
                 {
@@ -205,7 +212,7 @@ namespace Parking.Controllers
                     //Calcular baseado em minutos para cobrar da hora inicial.
                     if (totalmin <= 30)
                     {
-                        horasAPagar = 1/2; //Meia hora caso tenha ficado até 30 min.
+                        horasAPagar = 0.5; //Meia hora caso tenha ficado até 30 min.
                     }
                     else
                     {
@@ -228,7 +235,7 @@ namespace Parking.Controllers
                 vehicleControl.QtdHorasCobradas = horasAPagar;
 
                 //Carrega valor a pagar para ser apresentado ao usuario.
-                ViewBag.totalAPagar = new Decimal();
+                ViewBag.totalAPagar = new Double();
                 ViewBag.totalAPagar = (1 * valorHoraInicial + (horasAPagar - 1) * valorHoraAdicional);
 
 

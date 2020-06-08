@@ -17,12 +17,14 @@ namespace Parking.Models
         [Required(ErrorMessage = "Data Final da Vigência")]
         public DateTime FimVigencia { get; set; }
         [DisplayName("Valor da Hora Inicial")]
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Currency)]
         [Required(ErrorMessage = "Valor da Primeira hora")]
-        public Decimal ValorHoraInical { get; set; }
+        public Double ValorHoraInical { get; set; }
         [DisplayName("Valor da Hora Adicional")]
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DisplayFormat(DataFormatString = "{0:C}",ApplyFormatInEditMode =true)]
+        [DataType(DataType.Currency)]
         [Required(ErrorMessage = "Informe o valor para a hora adicional")]
-        public Decimal ValorHoraAdicional { get; set; }
+        public Double ValorHoraAdicional { get; set; }
     }
 }

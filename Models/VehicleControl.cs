@@ -24,12 +24,12 @@ namespace Parking.Models
         [DisplayName("Duração")]
         public string Duracao { get; set; }
         [DisplayName("Quantidade Horas")]
-        public Decimal? QtdHorasCobradas { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public Double? QtdHorasCobradas { get; set; }
         [DisplayName("Valor por Hora (media)")]
         [DisplayFormat(DataFormatString = "{0:C}")]
-        [Range(1, 100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
-        public Decimal? ValorHora { get; set; }
+        public Double? ValorHora { get; set; }
     }
 }

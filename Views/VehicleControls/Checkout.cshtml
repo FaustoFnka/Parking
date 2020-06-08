@@ -4,9 +4,8 @@
     ViewData["Title"] = "Checkout";
 }
 
-    <h1>Checkout</h1>
+    <h1>Registrar Saída do Veículo</h1>
 
-<h4>VehicleControl</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -42,19 +41,25 @@
                 <input asp-for="ValorHora" class="form-control" />
             </div>
             <div class="form-group">
-                <label class="control-label">Valor a Pagar</label>
-                <input class="form-control" value="@ViewBag.totalAPagar"/>
+                <label class="control-label">Valor hora</label>
+                <input class="form-control" value="Hora Inicial: @String.Format("{0:C}", ViewBag.vlrHoraInicial) | Hora Adicional: @String.Format("{0:C}", ViewBag.vlrHoraAdicional)" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label class="control-label">Valor a Pagar</label>
+                <input class="form-control" value="@String.Format("{0:C}",ViewBag.totalAPagar)" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Registrar Saída" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<a asp-action="Index">
+    <a asp-action="Index">
+        <input class="btn btn-success" type="Submit" value="Voltar">
+    </a>
+</a>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
