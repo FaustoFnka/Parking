@@ -107,6 +107,11 @@ namespace Parking.Controllers
                 return NotFound();
             }
 
+            if (vehicleControl.QtdHorasCobradas == null)
+            {
+                vehicleControl.HoraSaida = vehicleControl.HoraEntrada;
+            }
+
             if (ModelState.IsValid)
             {
                 try

@@ -4,11 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Tabela de Preços</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<a asp-action="Create">
+    <input class="btn btn-success" type="Submit" value="Criar Tabela de Preços">
+</a>
+
 <table class="table">
     <thead>
         <tr>
@@ -28,26 +29,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InicioVigencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FimVigencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValorHoraInical)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValorHoraAdicional)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InicioVigencia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FimVigencia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorHoraInical)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorHoraAdicional)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">
+                        <input class="btn btn-success" type="Submit" value="Editar">
+                    </a><a asp-action="Details" asp-route-id="@item.Id">
+                        <input class="btn btn-dark" type="Submit" value="Detalhes">
+                    </a><a asp-action="Delete" asp-route-id="@item.Id">
+                        <input class="btn btn-danger" type="Submit" value="Excluir">
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

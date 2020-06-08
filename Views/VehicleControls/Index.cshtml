@@ -4,18 +4,27 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Controle de Veículos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@using (Html.BeginForm())
-{
-    <p>
-        Find by Placa: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
-}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <a asp-action="Create">
+                <input class="btn btn-success" type="Submit"  value="Registrar Entrada">
+            </a>
+        </div>
+        <div class="col-md-4 ml-auto">
+            @using (Html.BeginForm())
+            {
+                <form class="navbar-form navbar-right" role="search">
+                    @Html.TextBox("SearchString")
+                    <button type="submit" class="btn btn-success">Filtrar</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -63,14 +72,23 @@
                     @Html.DisplayFor(modelItem => item.ValorHora)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     @if (item.HoraEntrada.Equals(item.HoraSaida))
                     {
-                        <a asp-action="Checkout" asp-route-id="@item.Id">Checkout</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
+                        <a asp-action="Checkout" asp-route-id="@item.Id">
+                            <input class="btn btn-success" type="Submit" value="Registar Saída">
+                        </a>
+                        <br />
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <input class="btn btn-dark" type="Submit" value="Editar">
+                        </a> 
+                        <a asp-action="Delete" asp-route-id="@item.Id">
+                            <input class="btn btn-danger" type="Submit" value="Excluir">
+                        </a>
 
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <input class="btn btn-success" type="Submit" value="Detalhes">
+                    </a>
                 </td>
             </tr>
         }
